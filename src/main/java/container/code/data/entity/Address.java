@@ -1,5 +1,6 @@
 package container.code.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,9 +18,11 @@ public class Address {
     @Column(name = "id")
     private Integer id;
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "account_id")
     private Account account;
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "district_id")
     private District district;
     @Column(name = "description")

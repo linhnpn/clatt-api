@@ -23,7 +23,7 @@ public class District {
     @JoinColumn(name = "province_id")
     private Province province;
 
-//    @OneToMany(mappedBy = "district")
-//    private List<Address> addresses;
+    @OneToMany(mappedBy = "district")
+    private List<Address> addresses;
 
 }

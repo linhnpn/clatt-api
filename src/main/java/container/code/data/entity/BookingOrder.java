@@ -1,5 +1,6 @@
 package container.code.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ public class BookingOrder {
     private Integer id;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private Account account;
 
