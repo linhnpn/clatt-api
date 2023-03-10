@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -26,8 +27,8 @@ public class Feedback {
     private Integer rate;
 
     @Column(name = "timestamp")
-    private Date timestamp;
+    private LocalDateTime timestamp;
 
     @OneToOne(mappedBy = "feedback")
-    private EmployeeOrder employeeOrder;
+    private BookingOrder bookingOrder;
 }

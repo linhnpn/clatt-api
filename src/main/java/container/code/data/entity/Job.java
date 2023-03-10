@@ -1,5 +1,6 @@
 package container.code.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,8 +27,8 @@ public class Job {
     @Column(name = "price")
     private Integer price;
 
-    @Column(name = "measure_value")
-    private Integer measureValue;
+    @Column(name = "is_deleted")
+    private boolean isDeleted;
 
     @Column(name = "measure_unit")
     private String measureUnit;
@@ -36,8 +37,11 @@ public class Job {
     private String thumbnailJobImage;
 
     @OneToMany(mappedBy = "job")
-    private List<OrderJob> orderJobs;
+    @JsonIgnore
+    private List<EmployeeJob> employeeJobs;
 
     @OneToMany(mappedBy = "job")
-    private List<SkillJob> skillJobs;
+    @JsonIgnore
+    private List<OrderJob> orderJobs;
+
 }

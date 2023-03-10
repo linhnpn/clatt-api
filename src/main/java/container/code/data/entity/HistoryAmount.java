@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -22,7 +23,7 @@ public class HistoryAmount {
     private Integer updateAmount;
 
     @Column(name = "timestamp")
-    private Date timestamp;
+    private LocalDateTime timestamp;
 
     @Column(name = "description")
     private String description;

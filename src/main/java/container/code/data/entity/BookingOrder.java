@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -23,14 +24,19 @@ public class BookingOrder {
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "user_id")
-    private Account account;
+    @JoinColumn(name = "renter_id")
+    private Account renter;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "employee_id")
+    private Account employee;
 
     @Column(name = "status")
     private String status;
 
-    @Column(name = "work_time")
-    private Integer workTime;
+    @Column(name = "work_hour")
+    private Integer workHour;
 
     @Column(name = "location")
     private String location;
@@ -38,12 +44,16 @@ public class BookingOrder {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "timestamp")
-    private Date timestamp;
+    @Column(name = "work_date")
+    private LocalDateTime workDate;
 
-    @OneToMany(mappedBy = "bookingOrder")
-    private List<EmployeeOrder> employeeOrders;
+    @Column(name = "timestamp")
+    private LocalDateTime timestamp;
 
     @OneToMany(mappedBy = "bookingOrder")
     private List<OrderJob> orderJobs;
+
+    @OneToOne
+    @JoinColumn(name = "feedback_id")
+    private Feedback feedback;
 }

@@ -17,13 +17,17 @@ public class Address {
     @Id
     @Column(name = "id")
     private Integer id;
+    @Column(name ="account_id")
+    private int accountId;
+    @Column(name = "district_id")
+    private int districtId;
     @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name = "account_id")
+    @JsonIgnoreProperties("addresses")
+    @JoinColumn(name = "account_id",insertable = false, updatable = false)
     private Account account;
     @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name = "district_id")
+    @JsonIgnoreProperties("addresses")
+    @JoinColumn(name = "district_id",insertable = false, updatable = false)
     private District district;
     @Column(name = "description")
     private String description;

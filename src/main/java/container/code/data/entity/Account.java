@@ -1,13 +1,17 @@
 package container.code.data.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -34,7 +38,7 @@ public class Account {
     private String fullname;
 
     @Column(name = "date_of_birth")
-    private Date dateOfBirth;
+    private LocalDateTime dateOfBirth;
 
     @Column(name = "gender")
     private String gender;
@@ -51,24 +55,33 @@ public class Account {
     @Column(name = "profile_picture")
     private String profilePicture;
 
-    @Column(name = "available_hire")
-    private Byte availableHire;
+    @Column(name = "is_locked")
+    private boolean isLocked;
+
+    @Column(name = "fcm_token")
+    private String fcmToken;
 
     @OneToMany(mappedBy = "account")
+    @JsonIgnoreProperties("account")
     private List<Address> addresses;
 
     @OneToMany(mappedBy = "account")
+    @JsonIgnoreProperties("account")
+    private List<EmployeeJob> employeeJobs;
+
+    @OneToMany(mappedBy = "account")
+    @JsonIgnoreProperties("account")
     private List<HistoryAmount> historyAmounts;
 
     @OneToMany(mappedBy = "account")
+    @JsonIgnoreProperties("account")
     private List<Notification> notifications;
 
-    @OneToMany(mappedBy = "account")
-    private List<EmployeeOrder> employeeOrders;
-
-    @OneToMany(mappedBy = "account")
-    private List<SkillEmployee> skillEmployees;
-
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "renter")
+    @JsonIgnoreProperties("account")
     private List<BookingOrder> bookingOrders;
+
+    @OneToMany(mappedBy = "employee")
+    @JsonIgnoreProperties("account")
+    private List<BookingOrder> bookedOrders;
 }

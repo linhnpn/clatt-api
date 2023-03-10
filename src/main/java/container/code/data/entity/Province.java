@@ -1,7 +1,11 @@
 package container.code.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +26,7 @@ public class Province {
     private String name;
 
     @OneToMany(mappedBy = "province")
+    @JsonIgnoreProperties({"province", "addresses"})
     private List<District> districts;
 
 }
