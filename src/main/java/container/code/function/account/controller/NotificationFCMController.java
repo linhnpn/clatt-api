@@ -4,14 +4,12 @@ import container.code.data.dto.NotificationRequestDto;
 import container.code.data.dto.SubscriptionRequestDto;
 import container.code.function.account.service.notification.FCMService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/notification")
+@RequestMapping("/notification-fcm")
+@CrossOrigin(origins = "https://cleaning-house-service.vercel.app", allowCredentials = "true")
 @RestController
-public class NotificationController {
+public class NotificationFCMController {
     @Autowired
     private FCMService fcmService;
     @PostMapping("/subscribe")
