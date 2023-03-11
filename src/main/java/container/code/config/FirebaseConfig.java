@@ -21,7 +21,7 @@ public class FirebaseConfig {
     @PostConstruct
     public void initializeFirebaseApp() throws IOException {
         ClassLoader classLoader = ClattAppsApplication.class.getClassLoader();
-        File file = new File(Objects.requireNonNull(classLoader.getResource("serviceAccountKey.json")).getFile());
+        File file = new File("serviceAccountKey.json");
         FileInputStream serviceAccount = new FileInputStream(file.getAbsolutePath());
 
         FirebaseOptions options = FirebaseOptions.builder()
