@@ -16,7 +16,6 @@ public class NotificationController {
     private NotificationService notificationService;
 
     @GetMapping("/getNotification")
-    @PreAuthorize("hasAnyAuthority('admin', 'renter', 'employee')")
     public ResponseEntity<ResponseObject> getNotificationDetail(
             @RequestParam(name = "account_id") Integer accountId,
             @RequestParam(name = "notification_id", required = false) Integer notificationId) {
@@ -24,7 +23,6 @@ public class NotificationController {
     }
 
     @GetMapping("/getAllNotifications")
-    @PreAuthorize("hasAnyAuthority('admin', 'renter', 'employee')")
     public ResponseEntity<ResponseObject> getAllNotifications(
             @RequestParam(name = "account_id") Integer accountId) {
         return notificationService.getAllMyNotificationsById(accountId);

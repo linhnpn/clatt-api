@@ -16,14 +16,12 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping("/getOrderListEmployee")
-    @PreAuthorize("hasAuthority('employee')")
     public ResponseEntity<ResponseObject> getOrderListForEmployee(
             @RequestParam(name = "employee_id") Integer id) {
         return orderService.getOrderListForEmployee(id);
     }
 
     @GetMapping("/getOrderListFilter")
-    @PreAuthorize("hasAuthority('employee')")
     public ResponseEntity<ResponseObject> getWaitingOrderList(
             @RequestParam(name = "employee_id") Integer id,
             @RequestParam(name = "status") String status) {
@@ -31,14 +29,12 @@ public class OrderController {
     }
 
     @GetMapping("/getOrderListRenter")
-    @PreAuthorize("hasAuthority('renter')")
     public ResponseEntity<ResponseObject> getOrderListForRenter(
             @RequestParam(name = "renter_id") Integer id) {
         return orderService.getOrderListForRenter(id);
     }
 
     @PutMapping("updateOrderStatus")
-    @PreAuthorize("hasAuthority('employee')")
     public ResponseEntity<ResponseObject> updateOrderStatus (
             @RequestParam(name = "order_id") Integer id,
             @RequestParam(name = "status") String status) {

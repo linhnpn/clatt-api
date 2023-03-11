@@ -61,16 +61,17 @@ public class BookingServiceImpl implements BookingService {
         try {
             BookingOrder bookingOrder = new BookingOrder();
             Account accountUser = findAccount(userId);
-
+            Account accountEmp = findAccount(employeeId);
             bookingOrder.setWorkHour(workTime);
             bookingOrder.setRenter(accountUser);
             bookingOrder.setStatus(status);
             bookingOrder.setTimestamp(timestamp);
             bookingOrder.setDescription(description);
+            bookingOrder.setEmployee(accountEmp);
             bookingOrder.setLocation("903 D1, Thu Duc City, Hồ Chí Minh City");
             BookingOrder saveBooking = bookingOrderRepository.save(bookingOrder);
 
-            Account accountEmp = findAccount(employeeId);
+
             Job job = findJob(jobId);
 
             OrderJob orderJob = new OrderJob();

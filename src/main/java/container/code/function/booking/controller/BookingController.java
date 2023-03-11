@@ -31,7 +31,6 @@ public class BookingController {
     }
 
     @PostMapping("/create-booking")
-    @PreAuthorize("hasAnyAuthority('renter', 'employee')")
     public ResponseEntity<ResponseObject> createBooking(@RequestParam Integer userId, @RequestParam Integer employeeId,
                                                         @RequestParam Integer jobId, @RequestParam String timestamp,
                                                         @RequestParam Integer address_id, @RequestParam String status,
@@ -41,14 +40,12 @@ public class BookingController {
     }
 
     @PutMapping("/update/{booking_id}")
-    @PreAuthorize("hasAnyAuthority('admin', 'renter', 'employee')")
     public ResponseEntity<ResponseObject> updateBooking(@PathVariable("booking_id") int booking_id,
                                                         @RequestBody(required = false) BookingOrder bookingOrder) {
         return bookingService.updateBookingOrder(booking_id, bookingOrder);
     }
 
     @DeleteMapping("/delete/{booking_id}")
-    @PreAuthorize("hasAnyAuthority('admin')")
     public ResponseEntity<ResponseObject> deleteBooking(@PathVariable("booking_id") int booking_id) {
         return bookingService.deleteBookingOrder(booking_id);
 

@@ -17,7 +17,6 @@ public class EmployeeJobController {
     @Autowired
     private EmployeeJobService employeeJobService;
     @GetMapping("/{jobId}")
-    @PreAuthorize("hasAnyAuthority('admin', 'renter', 'employee')")
     public ResponseEntity<ResponseObject> getWorker(@PathVariable("jobId") int jobId) {
         try {
             return employeeJobService.getWorkerByJobId(jobId);

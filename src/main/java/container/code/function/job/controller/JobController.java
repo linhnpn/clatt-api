@@ -22,19 +22,16 @@ public class JobController {
     private JobService jobService;
 
     @PostMapping("/get-jobs")
-    @PreAuthorize("hasAnyAuthority('admin', 'renter', 'employee')")
     public ResponseEntity<ResponseObject> getJobs() {
         return jobService.getAllJob();
     }
 
     @PostMapping("/get-job/{job_id}")
-    @PreAuthorize("hasAnyAuthority('admin', 'renter', 'employee')")
     public ResponseEntity<ResponseObject> getJob(@PathVariable("job_id") int job_id) {
         return jobService.getJob(job_id);
     }
 
     @PostMapping(value = "/create-job", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<ResponseObject> createJob(@RequestPart(required = true) MultipartFile file,
                                                     @RequestParam("name") String name,
                                                     @RequestParam("measure_unit") String measure_unit,
