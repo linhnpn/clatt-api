@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "https://cleaning-house-service.vercel.app", allowCredentials = "true")
+@CrossOrigin(origins = {"https://cleaning-house-service.vercel.app", "https://clatt-api.monoinfinity.net"}, allowCredentials = "true")
 @RequestMapping(value = "/job")
 public class JobController {
     @Autowired
