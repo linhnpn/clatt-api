@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,10 +45,11 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public boolean createNotification(Integer userId, String status, String detail) {
+    public boolean createNotification(Integer userId, String status, String detail, LocalDateTime timestamp) {
         Notification notification = new Notification();
         notification.setStatus(status);
         notification.setDetail(detail);
+        notification.setTimestamp(timestamp);
         try {
             Account account = findAccount(userId);
             List<Notification> list = account.getNotifications();

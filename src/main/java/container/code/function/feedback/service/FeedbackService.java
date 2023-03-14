@@ -12,7 +12,7 @@ public interface FeedbackService {
 
     ResponseEntity<ResponseObject> getFeedbacks(int employee_id, int job_id, Integer rate);
 
-    ResponseEntity<ResponseObject> addFeedback(Integer id, Feedback feedback) throws IllegalAccessException;
+    ResponseEntity<ResponseObject> addFeedback(Integer id, String feedback, Integer rate) throws IllegalAccessException;
 
     ResponseEntity<ResponseObject> updateFeedback(Feedback feedback);
 

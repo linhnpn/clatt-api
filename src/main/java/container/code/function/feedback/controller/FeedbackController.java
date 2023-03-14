@@ -36,12 +36,12 @@ public class FeedbackController {
         return feedbackService.getFeedbacks(employee_id, job_id, rate);
     }
 
-    @PostMapping("/create-feedback/{id}")
+    @PostMapping("/create-feedback/{order_id}")
     @PreAuthorize("hasAuthority('renter')")
-    public ResponseEntity<ResponseObject> createFeedback(@PathVariable("order_id") Integer orderId, @RequestBody Feedback feedback) {
+    public ResponseEntity<ResponseObject> createFeedback(@PathVariable("order_id") Integer orderId, @RequestParam(value = "detail") String feedback,
+                                                         @RequestParam(value = "rate") Integer rate) {
         try {
-            feedback.setId(null);
-            return feedbackService.addFeedback(orderId, feedback);
+            return feedbackService.addFeedback(orderId, feedback, rate);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }

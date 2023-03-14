@@ -23,7 +23,6 @@ public class EmployeeJobServiceImpl implements EmployeeJobService {
     public ResponseEntity<ResponseObject> getWorkerByJobId(Integer id) {
         try {
             List<WorkerResponse> workerResponses = employeeJobRepository.findAllByJob_Id(id).stream().map(workerMapper::toEmpResponse).collect(Collectors.toList());
-
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ResponseObject(HttpStatus.ACCEPTED.toString(), null, workerResponses));
 
         } catch (Exception e) {

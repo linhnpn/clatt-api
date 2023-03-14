@@ -45,7 +45,7 @@ public interface BookingOrderRepository extends JpaRepository<BookingOrder, Inte
     "WHERE (:status IS NULL OR bo.status = :status) " +
             "AND (:bookingId IS NULL OR bo.id = :bookingId)" +
             "AND (:userId IS NULL OR ren.id = :userId) " +
-            "AND (:employeeId IS NULL OR ren.id = :employeeId)", nativeQuery = false)
+            "AND (:employeeId IS NULL OR e.id = :employeeId)", nativeQuery = false)
     List<Map<String, Object>> findAllByStatusId(@Param("status") String status, @Param("userId") Integer userId,
                                                 @Param("employeeId") Integer employeeId, @Param("bookingId") Integer bookingId);
 }

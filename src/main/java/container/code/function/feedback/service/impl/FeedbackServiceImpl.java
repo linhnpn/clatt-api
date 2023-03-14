@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -92,12 +93,15 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> addFeedback(Integer id, Feedback feedback) throws IllegalAccessException {
+    public ResponseEntity<ResponseObject> addFeedback(Integer id, String detail, Integer rate) throws IllegalAccessException {
         try {
             BookingOrder bookingOrder = findBookingOrder(id);
-
-            if (bookingOrder.getFeedback().getId() != null) {
+            Feedback feedback = new Feedback();
+            if (bookingOrder.getFeedback() == null) {
                 feedback.setBookingOrder(bookingOrder);
+                feedback.setRate(rate);
+                feedback.setDetail(detail);
+                feedback.setTimestamp(LocalDateTime.now());
                 feedbackRepository.save(feedback);
                 bookingOrder.setFeedback(feedback);
                 bookingOrderRepository.save(bookingOrder);

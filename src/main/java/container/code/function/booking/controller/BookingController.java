@@ -31,9 +31,11 @@ public class BookingController {
     public ResponseEntity<ResponseObject> createBooking(@RequestParam Integer userId, @RequestParam Integer employeeId,
                                                         @RequestParam Integer jobId, @RequestParam String timestamp,
                                                         @RequestParam Integer address_id, @RequestParam String status,
-                                                        @RequestParam String description, @RequestParam Integer workTime) {
+                                                        @RequestParam String description, @RequestParam Integer workTime,
+                                                        @RequestParam String workDate) {
         LocalDateTime dateTime = LocalDateTime.parse(timestamp);
-        return bookingService.addBookingOrder(userId, employeeId, jobId, dateTime, address_id, status, description, workTime);
+        LocalDateTime workDateTime = LocalDateTime.parse(workDate);
+        return bookingService.addBookingOrder(userId, employeeId, jobId, dateTime,workDateTime, address_id, status, description, workTime);
     }
 
     @PutMapping("/update/{booking_id}")

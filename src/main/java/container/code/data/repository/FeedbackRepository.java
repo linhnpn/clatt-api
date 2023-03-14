@@ -16,4 +16,15 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Integer> {
             "WHERE emp.id = :employee_id AND oj.job.id = :job_id " +
             "AND (:rate IS NULL OR f.rate = :rate)")
     List<Feedback> findAllByEmployeeOrder(@Param("employee_id") int employeeId, @Param("job_id") int jobId, @Param("rate") Integer rate);
+
+
+    @Query(value = "SELECT COUNT(*) FROM Feedback f LEFT JOIN f.bookingOrder bo " +
+            "LEFT JOIN bo.orderJobs oj LEFT JOIN oj.job j LEFT JOIN bo.employee emp " +
+            "WHERE j.id = :job_id AND emp.id = :emp_id")
+    String countFeedback(@Param("job_id") Integer jobId, @Param("emp_id") Integer empId);
+
+    @Query(value = "SELECT AVG(f.rate) FROM Feedback f LEFT JOIN f.bookingOrder bo " +
+            "LEFT JOIN bo.orderJobs oj LEFT JOIN oj.job j LEFT JOIN bo.employee emp " +
+            "WHERE j.id = :job_id AND emp.id = :emp_id ")
+    String averageFeedback(@Param("job_id") Integer jobId, @Param("emp_id") Integer empId);
 }

@@ -11,8 +11,10 @@ import container.code.data.entity.District;
 import container.code.data.repository.AccountRepository;
 import container.code.data.repository.AddressRepository;
 import container.code.data.repository.DistrictRepository;
+import container.code.function.account.service.filestorage.FileStorage;
 import container.code.function.authentication.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AccountExpiredException;
@@ -24,6 +26,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.webjars.NotFoundException;
 
 import java.time.LocalDateTime;
@@ -36,12 +39,16 @@ public class AuthServiceImpl implements AuthService {
 
     private final String companyEmail = "clatt@gmail.com";
 
+    @Value("${default.profile.img}")
+    private String defaultImage;
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
     private DistrictRepository districtRepository;
     @Autowired
     private JwtUtils jwtUtils;
+    @Autowired
+    private FileStorage fileStorage;
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Autowired
@@ -108,7 +115,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private District findDistrict(Integer id) {
-        District district = districtRepository.findById(id).orElseThrow(() -> new NotFoundException("Account not found"));
+        District district = districtRepository.findById(id).orElseThrow(() -> new NotFoundException("District not found"));
         return district;
     }
 
@@ -121,6 +128,8 @@ public class AuthServiceImpl implements AuthService {
                 account.setPassword(passwordEncoder.encode(form.getPassword()));
                 account.setEmail(form.getEmail());
                 account.setFullname(form.getFullname());
+                account.setFcmToken("randomFcm");
+                account.setProfilePicture(defaultImage);
                 account.setPhone(form.getPhone());
                 account.setDateOfBirth(LocalDateTime.parse(form.getDateOfBirth()));
                 account.setGender(form.getGender());
@@ -142,11 +151,29 @@ public class AuthServiceImpl implements AuthService {
                     return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ResponseObject(HttpStatus.ACCEPTED.toString(), "Create account successfully.", null));
                 }
             } catch (Exception e) {
-                System.out.println(e);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(), "Something wrong occur.", null));
             }
         else
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(), "Username is existed.", null));
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> updateAccount(MultipartFile file, String description, Integer id) {
+        try {
+            Account account = accountRepository.findById(id).orElseThrow(() -> new NotFoundException("Account not found"));
+            String url = "";
+            if (file != null) {
+                url = fileStorage.uploadFile(file);
+                account.setProfilePicture(url);
+            }
+            if (description != null && !description.isEmpty()) {
+                account.setBio(description);
+            }
+            accountRepository.save(account);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ResponseObject(HttpStatus.ACCEPTED.toString(), "Update account successfully.", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(), "Update account failed!", null));
+        }
     }
 
     public boolean validateEmail(String email) {

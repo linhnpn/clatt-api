@@ -59,22 +59,24 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public ResponseEntity<ResponseObject> addBookingOrder(Integer renterId, Integer employeeId, Integer jobId, LocalDateTime timestamp,
+                                                          LocalDateTime workDate,
                                                           Integer address_id, String status, String description, Integer workTime) {
         try {
             BookingOrder bookingOrder = new BookingOrder();
             Account accountUser = findAccount(renterId);
+            Account accountEmp = findAccount(employeeId);
             Address address = addressRepository.findAddressByAccountId(renterId);
 
             bookingOrder.setWorkHour(workTime);
             bookingOrder.setRenter(accountUser);
+            bookingOrder.setEmployee(accountEmp);
             bookingOrder.setStatus(status);
+            bookingOrder.setWorkDate(workDate);
             bookingOrder.setTimestamp(timestamp);
             bookingOrder.setDescription(description);
             bookingOrder.setLocation(address.getDescription() + ", " + address.getDistrict().getName() + ", " +
                     address.getDistrict().getProvince().getName());
             BookingOrder saveBooking = bookingOrderRepository.save(bookingOrder);
-
-            Account accountEmp = findAccount(employeeId);
             Job job = findJob(jobId);
 
             OrderJob orderJob = new OrderJob();
@@ -91,8 +93,8 @@ public class BookingServiceImpl implements BookingService {
             dtoForEmp.setBody("An booking for you, please  confirm");
             dtoForEmp.setTitle("New Booking!");
             fcmService.sendPnsToTopic(dtoForEmp);
-            notificationService.createNotification(accountEmp.getId(), status, dto.getBody());
-            notificationService.createNotification(accountUser.getId(), status, dtoForEmp.getBody());
+            notificationService.createNotification(accountEmp.getId(), status, dto.getBody(), timestamp);
+            notificationService.createNotification(accountUser.getId(), status, dtoForEmp.getBody(), timestamp);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ResponseObject(HttpStatus.ACCEPTED.toString(), "Add new Booking Successfully", null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(), "Something wrong occur!", null));
@@ -138,8 +140,8 @@ public class BookingServiceImpl implements BookingService {
                 dtoForEmp.setTitle("Cancel!");
                 fcmService.sendPnsToTopic(dtoForEmp);
             }
-            notificationService.createNotification(accountEmp.getId(), existBookingOrder.getStatus(), dto.getBody());
-            notificationService.createNotification(accountUser.getId(), existBookingOrder.getStatus(), dtoForEmp.getBody());
+            notificationService.createNotification(accountEmp.getId(), existBookingOrder.getStatus(), dto.getBody(), LocalDateTime.now());
+            notificationService.createNotification(accountUser.getId(), existBookingOrder.getStatus(), dtoForEmp.getBody(), LocalDateTime.now());
             bookingOrderRepository.save(existBookingOrder);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ResponseObject(HttpStatus.ACCEPTED.toString(), "Updated Booking Successfully!", null));
         } catch (Exception e) {
@@ -184,8 +186,8 @@ public class BookingServiceImpl implements BookingService {
                 dtoForEmp.setTitle("Cancel!");
                 fcmService.sendPnsToTopic(dtoForEmp);
             }
-            notificationService.createNotification(accountEmp.getId(), existBookingOrder.getStatus(), dto.getBody());
-            notificationService.createNotification(accountUser.getId(), existBookingOrder.getStatus(), dtoForEmp.getBody());
+            notificationService.createNotification(accountEmp.getId(), existBookingOrder.getStatus(), dto.getBody(), LocalDateTime.now());
+            notificationService.createNotification(accountUser.getId(), existBookingOrder.getStatus(), dtoForEmp.getBody(), LocalDateTime.now());
             bookingOrderRepository.save(existBookingOrder);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ResponseObject(HttpStatus.ACCEPTED.toString(), "Updated Booking Successfully!", null));
         } catch (Exception e) {

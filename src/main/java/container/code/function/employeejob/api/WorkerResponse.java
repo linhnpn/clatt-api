@@ -8,11 +8,12 @@ import lombok.Data;
 public class WorkerResponse {
     private Integer empId;
     private Integer jobEmpId;
+    private Integer jobId;
     private String empName;
     private String srcPicture;
     private String description;
-    private int countRate;
-    private Double rate;
+    private Long countRate;
+    private Double averageRate;
     private String location;
     private String jobName;
     private Integer priceJob;

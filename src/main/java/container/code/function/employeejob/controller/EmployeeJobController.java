@@ -20,6 +20,7 @@ public class EmployeeJobController {
         try {
             return employeeJobService.getWorkerByJobId(jobId);
         } catch (Exception e) {
+            System.out.println(e);
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

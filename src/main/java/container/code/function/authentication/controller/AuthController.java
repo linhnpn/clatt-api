@@ -6,8 +6,11 @@ import container.code.data.dto.ResponseObject;
 import container.code.data.dto.LoginForm;
 import container.code.function.authentication.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @CrossOrigin(origins = "https://cleaning-house-service.vercel.app", allowCredentials = "true")
@@ -31,5 +34,14 @@ public class AuthController {
     public ResponseEntity<ResponseObject> createAccount(
             @RequestBody CreateAccountForm form) {
         return authService.createAccount(form);
+    }
+
+    @PostMapping(value = "/updateAccount", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAnyAuthority('admin', 'renter', 'employee')")
+    public ResponseEntity<ResponseObject> updateAccount(
+            @RequestPart(required = false) MultipartFile file,
+            @RequestParam(required = false) String description,
+            @RequestParam(required = false) Integer accountId) {
+        return authService.updateAccount(file, description, accountId);
     }
 }
