@@ -2,11 +2,8 @@ package container.code.function.notification.service.impl;
 
 import container.code.data.dto.ResponseObject;
 import container.code.data.entity.Account;
-import container.code.data.entity.BookingOrder;
-import container.code.data.entity.Feedback;
 import container.code.data.entity.Notification;
 import container.code.data.repository.AccountRepository;
-import container.code.data.repository.BookingOrderRepository;
 import container.code.data.repository.NotificationRepository;
 import container.code.function.notification.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;

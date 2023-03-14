@@ -1,6 +1,5 @@
 package container.code.function.province.controller;
 
-import container.code.data.entity.Account;
 import container.code.data.entity.Province;
 import container.code.function.province.api.ProvinceResponse;
 import container.code.function.province.service.ProvinceService;
@@ -25,10 +24,12 @@ public class ProvinceController {
     @GetMapping("getProvinceById")
     public Optional<Province> getProvinceById(
             @Parameter(description = "Enter province Id") @RequestParam(name = "id") @Min(value = 1, message = "Id must be equal or greater than 1") Integer Id
-    ) { return provinceService.getProvinceById(Id);}
+    ) {
+        return provinceService.getProvinceById(Id);
+    }
 
     @GetMapping("/all")
-    public ResponseEntity<List<ProvinceResponse>> getAll(){
+    public ResponseEntity<List<ProvinceResponse>> getAll() {
         return new ResponseEntity<List<ProvinceResponse>>(provinceService.getAllProvince(), HttpStatus.OK);
     }
 }

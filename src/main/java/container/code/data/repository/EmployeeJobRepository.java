@@ -16,4 +16,10 @@ public interface EmployeeJobRepository extends JpaRepository<EmployeeJob, Intege
             "WHERE j.id = :job_id ")
     List<EmployeeJob> findAllByJob_Id(@Param("job_id") Integer jobId);
 
+    @Query(value = "SELECT ej " +
+            "FROM EmployeeJob ej LEFT JOIN ej.job " +
+            "LEFT JOIN ej.account " +
+            "WHERE ej.account.id = :account_id " +
+            "AND ej.job.id = :job_id")
+    EmployeeJob findByJobAndAccountId(@Param("job_id") Integer jobId,@Param("account_id") Integer employeeId);
 }

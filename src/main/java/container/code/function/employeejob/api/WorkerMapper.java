@@ -1,6 +1,5 @@
 package container.code.function.employeejob.api;
 
-import container.code.data.entity.Account;
 import container.code.data.entity.EmployeeJob;
 import org.springframework.stereotype.Component;
 

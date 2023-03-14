@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DistrictMapper {
-    public DistrictResponse toDistrictResponse(District district){
+    public DistrictResponse toDistrictResponse(District district) {
         DistrictResponse districtResponse = new DistrictResponse();
         districtResponse.setDistrict_id(district.getId());
         districtResponse.setDistrictName(district.getName());

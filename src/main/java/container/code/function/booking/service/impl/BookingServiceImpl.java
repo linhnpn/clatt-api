@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
 import javax.transaction.Transactional;
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,6 +37,9 @@ public class BookingServiceImpl implements BookingService {
     BookingMapper bookingMapper;
 
     @Autowired
+    AddressRepository addressRepository;
+
+    @Autowired
     NotificationService notificationService;
 
     private BookingOrder findBooking(Integer id) {
@@ -56,22 +58,23 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> addBookingOrder(Integer userId, Integer employeeId, Integer jobId, LocalDateTime timestamp,
+    public ResponseEntity<ResponseObject> addBookingOrder(Integer renterId, Integer employeeId, Integer jobId, LocalDateTime timestamp,
                                                           Integer address_id, String status, String description, Integer workTime) {
         try {
             BookingOrder bookingOrder = new BookingOrder();
-            Account accountUser = findAccount(userId);
-            Account accountEmp = findAccount(employeeId);
+            Account accountUser = findAccount(renterId);
+            Address address = addressRepository.findAddressByAccountId(renterId);
+
             bookingOrder.setWorkHour(workTime);
             bookingOrder.setRenter(accountUser);
             bookingOrder.setStatus(status);
             bookingOrder.setTimestamp(timestamp);
             bookingOrder.setDescription(description);
-            bookingOrder.setEmployee(accountEmp);
-            bookingOrder.setLocation("903 D1, Thu Duc City, Hồ Chí Minh City");
+            bookingOrder.setLocation(address.getDescription() + ", " + address.getDistrict().getName() + ", " +
+                    address.getDistrict().getProvince().getName());
             BookingOrder saveBooking = bookingOrderRepository.save(bookingOrder);
 
-
+            Account accountEmp = findAccount(employeeId);
             Job job = findJob(jobId);
 
             OrderJob orderJob = new OrderJob();
@@ -102,14 +105,12 @@ public class BookingServiceImpl implements BookingService {
     public ResponseEntity<ResponseObject> updateBookingOrder(Integer bookingOrderId, BookingOrder bookingOrder) {
         try {
             BookingOrder existBookingOrder = findBooking(bookingOrderId);
-            existBookingOrder.setStatus(bookingOrder.getStatus());
-            existBookingOrder.setWorkHour(bookingOrder.getWorkHour());
-            existBookingOrder.setDescription(bookingOrder.getDescription());
-            Account accountUser = findAccount(existBookingOrder.getRenter().getId());
-            Account accountEmp = findAccount(existBookingOrder.getEmployee().getId());
+            existBookingOrder.setStatus(existBookingOrder.getStatus());
+            Account accountUser = existBookingOrder.getRenter();
+            Account accountEmp = existBookingOrder.getEmployee();
             NotificationRequestDto dto = new NotificationRequestDto();
             NotificationRequestDto dtoForEmp = new NotificationRequestDto();
-            if (bookingOrder.getStatus().equals("done")) {
+            if (existBookingOrder.getStatus().equals("done")) {
                 dto.setTarget(accountUser.getFcmToken());
                 dto.setBody("It done, pls vote and feedback");
                 dto.setTitle("All Done!");
@@ -118,16 +119,16 @@ public class BookingServiceImpl implements BookingService {
                 dtoForEmp.setBody("All Done, Good Job!!");
                 dtoForEmp.setTitle("Done!");
                 fcmService.sendPnsToTopic(dtoForEmp);
-            } else if (bookingOrder.getStatus().equals("undone")) {
+            } else if (existBookingOrder.getStatus().equals("undone")) {
                 dto.setTarget(accountUser.getFcmToken());
-                dto.setBody("Employee has been cofirm your booking");
+                dto.setBody("Employee has been confirm your booking");
                 dto.setTitle("Waiting for Employee!");
                 fcmService.sendPnsToTopic(dto);
                 dtoForEmp.setTarget(accountEmp.getFcmToken());
                 dtoForEmp.setBody("Confirm success, work on time!!");
                 dtoForEmp.setTitle("Confirm!");
                 fcmService.sendPnsToTopic(dtoForEmp);
-            } else if (bookingOrder.getStatus().equals("cancel")) {
+            } else if (existBookingOrder.getStatus().equals("cancel")) {
                 dto.setTarget(accountUser.getFcmToken());
                 dto.setBody("Booking is cancel Successful!");
                 dto.setTitle("Cancel!");
@@ -137,14 +138,59 @@ public class BookingServiceImpl implements BookingService {
                 dtoForEmp.setTitle("Cancel!");
                 fcmService.sendPnsToTopic(dtoForEmp);
             }
-            notificationService.createNotification(accountEmp.getId(), bookingOrder.getStatus(), dto.getBody());
-            notificationService.createNotification(accountUser.getId(), bookingOrder.getStatus(), dtoForEmp.getBody());
+            notificationService.createNotification(accountEmp.getId(), existBookingOrder.getStatus(), dto.getBody());
+            notificationService.createNotification(accountUser.getId(), existBookingOrder.getStatus(), dtoForEmp.getBody());
             bookingOrderRepository.save(existBookingOrder);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ResponseObject(HttpStatus.ACCEPTED.toString(), "Updated Booking Successfully!", null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(), "Something wrong occur!", null));
         }
+    }
 
+    @Override
+    public ResponseEntity<ResponseObject> updateBookingOrderStatus(Integer bookingOrderId, String status) {
+        try {
+            BookingOrder existBookingOrder = findBooking(bookingOrderId);
+            existBookingOrder.setStatus(status);
+            Account accountUser = existBookingOrder.getRenter();
+            Account accountEmp = existBookingOrder.getEmployee();
+            NotificationRequestDto dto = new NotificationRequestDto();
+            NotificationRequestDto dtoForEmp = new NotificationRequestDto();
+            if (existBookingOrder.getStatus().equals("done")) {
+                dto.setTarget(accountUser.getFcmToken());
+                dto.setBody("It done, pls vote and feedback");
+                dto.setTitle("All Done!");
+                fcmService.sendPnsToTopic(dto);
+                dtoForEmp.setTarget(accountEmp.getFcmToken());
+                dtoForEmp.setBody("All Done, Good Job!!");
+                dtoForEmp.setTitle("Done!");
+                fcmService.sendPnsToTopic(dtoForEmp);
+            } else if (existBookingOrder.getStatus().equals("undone")) {
+                dto.setTarget(accountUser.getFcmToken());
+                dto.setBody("Employee has been confirm your booking");
+                dto.setTitle("Waiting for Employee!");
+                fcmService.sendPnsToTopic(dto);
+                dtoForEmp.setTarget(accountEmp.getFcmToken());
+                dtoForEmp.setBody("Confirm success, work on time!!");
+                dtoForEmp.setTitle("Confirm!");
+                fcmService.sendPnsToTopic(dtoForEmp);
+            } else if (existBookingOrder.getStatus().equals("cancel")) {
+                dto.setTarget(accountUser.getFcmToken());
+                dto.setBody("Booking is cancel Successful!");
+                dto.setTitle("Cancel!");
+                fcmService.sendPnsToTopic(dto);
+                dtoForEmp.setTarget(accountEmp.getFcmToken());
+                dtoForEmp.setBody("Booking" + bookingOrderId + " is cancel!");
+                dtoForEmp.setTitle("Cancel!");
+                fcmService.sendPnsToTopic(dtoForEmp);
+            }
+            notificationService.createNotification(accountEmp.getId(), existBookingOrder.getStatus(), dto.getBody());
+            notificationService.createNotification(accountUser.getId(), existBookingOrder.getStatus(), dtoForEmp.getBody());
+            bookingOrderRepository.save(existBookingOrder);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ResponseObject(HttpStatus.ACCEPTED.toString(), "Updated Booking Successfully!", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(), "Something wrong occur!", null));
+        }
     }
 
     @Override

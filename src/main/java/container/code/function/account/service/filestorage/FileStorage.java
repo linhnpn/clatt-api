@@ -1,7 +1,6 @@
 package container.code.function.account.service.filestorage;
 
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.storage.Blob;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.StorageClient;
@@ -63,7 +62,7 @@ public class FileStorage {
         String fileName = getFileNameFromUrl(url);
         StorageClient storageClient = StorageClient.getInstance();
 
-        return storageClient.bucket().get(fileName).delete();
+        return storageClient.bucket(storageBucket).get(fileName).delete();
     }
 
     private String getFileNameFromUrl(String url) {

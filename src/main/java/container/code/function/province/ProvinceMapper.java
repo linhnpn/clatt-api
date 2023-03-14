@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ProvinceMapper {
-    public ProvinceResponse toProvinceResponse(Province province){
+    public ProvinceResponse toProvinceResponse(Province province) {
         ProvinceResponse provinceResponse = new ProvinceResponse();
         provinceResponse.setProvince_id(province.getId());
         provinceResponse.setProvinceName(province.getName());

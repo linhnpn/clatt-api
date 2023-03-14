@@ -8,12 +8,14 @@ import org.springframework.stereotype.Component;
 public class FeedbackMapper {
     public FeedbackResponseMap toFeedbackResponse(Feedback feedback) {
         FeedbackResponseMap feedbackResponseMap = new FeedbackResponseMap();
+        feedbackResponseMap.setId(feedback.getId());
         feedbackResponseMap.setDetail(feedback.getDetail());
         feedbackResponseMap.setRate(feedback.getRate());
-//        feedbackResponse.setTimestamp(feedback.getTimestamp());
-//        feedbackResponse.setUser_id(feedback.getEmployeeOrder().getBookingOrder().getAccount().getId());
-//        feedbackResponse.setUserName(feedback.getEmployeeOrder().getBookingOrder().getAccount().getFullname());
-//        feedbackResponse.setEmployee_id(feedback.getEmployeeOrder().getAccount().getId());
+        feedbackResponseMap.setProfilePicture(feedback.getBookingOrder().getRenter().getProfilePicture());
+        feedbackResponseMap.setTimestamp(feedback.getTimestamp());
+        feedbackResponseMap.setUser_id(feedback.getBookingOrder().getRenter().getId());
+        feedbackResponseMap.setUserName(feedback.getBookingOrder().getRenter().getFullname());
+        feedbackResponseMap.setEmployee_id(feedback.getBookingOrder().getEmployee().getId());
         return feedbackResponseMap;
     }
 }

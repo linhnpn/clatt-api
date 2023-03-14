@@ -2,10 +2,7 @@ package container.code.function.address.service;
 
 import container.code.data.dto.ResponseObject;
 import container.code.data.entity.Address;
-import container.code.function.address.api.AddressResponse;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 public interface AddressService {
     ResponseEntity<ResponseObject> getAllAddress();

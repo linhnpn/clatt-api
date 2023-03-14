@@ -18,11 +18,16 @@ import java.util.Objects;
 
 @Configuration
 public class FirebaseConfig {
+
+    @Value("classpath:serviceAccountKey.json")
+    private Resource resource;
+
     @PostConstruct
     public void initializeFirebaseApp() throws IOException {
         ClassLoader classLoader = ClattAppsApplication.class.getClassLoader();
-        File file = new File(Objects.requireNonNull(classLoader.getResource("serviceAccountKey.json")).getFile());
-        FileInputStream serviceAccount = new FileInputStream(file.getAbsolutePath());
+//        File file = new File(Objects.requireNonNull(classLoader.getResource("serviceAccountKey.json")).getFile());
+//        File file = new File("...\\src\\main\\resources\\serviceAccountKey.json");
+        FileInputStream serviceAccount = new FileInputStream(resource.getFile());
 
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))

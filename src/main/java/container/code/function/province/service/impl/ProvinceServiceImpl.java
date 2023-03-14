@@ -17,8 +17,11 @@ public class ProvinceServiceImpl implements ProvinceService {
 
     @Autowired
     private ProvinceRepository provinceRepository;
+
     @Override
-    public Optional<Province> getProvinceById(Integer Id) { return provinceRepository.findById(Id);}
+    public Optional<Province> getProvinceById(Integer Id) {
+        return provinceRepository.findById(Id);
+    }
 
     @Autowired
     private ProvinceMapper provinceMapper;

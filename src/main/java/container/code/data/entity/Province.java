@@ -26,6 +26,7 @@ public class Province {
     private String name;
 
     @OneToMany(mappedBy = "province")
+    @JsonIgnore
     @JsonIgnoreProperties({"province", "addresses"})
     private List<District> districts;
 

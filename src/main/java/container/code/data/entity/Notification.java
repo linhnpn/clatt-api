@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-@JsonIgnoreProperties({"hibernateLazyInitializer"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "account", "notificationStatus"})
 public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id

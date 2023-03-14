@@ -5,7 +5,6 @@ import container.code.data.entity.Account;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,4 +20,6 @@ public interface AccountService {
     ResponseEntity<ResponseObject> banAccount(Integer id);
 
     ResponseEntity<ResponseObject> getAccountsForOrder(LocalDateTime date);
+
+    ResponseEntity<ResponseObject> updateFcmToken(Integer id, String fcmToken);
 }

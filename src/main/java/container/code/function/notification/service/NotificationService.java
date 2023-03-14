@@ -1,7 +1,6 @@
 package container.code.function.notification.service;
 
 import container.code.data.dto.ResponseObject;
-import container.code.data.entity.Notification;
 import org.springframework.http.ResponseEntity;
 
 public interface NotificationService {

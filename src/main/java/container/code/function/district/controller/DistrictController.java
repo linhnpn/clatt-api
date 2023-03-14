@@ -2,13 +2,10 @@ package container.code.function.district.controller;
 
 import container.code.data.dto.DistrictDto;
 import container.code.data.dto.ResponseObject;
-import container.code.data.entity.District;
 import container.code.function.district.DistrictService;
-import container.code.function.district.api.DistrictResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,9 +29,9 @@ public class DistrictController {
     }
 
     @PostMapping("/redisDistrict")
-    public ResponseEntity<String> saveBrand(@RequestBody DistrictDto district){
+    public ResponseEntity<String> saveBrand(@RequestBody DistrictDto district) {
         boolean result = districtService.saveDistrict(district);
-        if(result)
+        if (result)
             return ResponseEntity.ok("District Create Successfully");
         else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -42,7 +39,7 @@ public class DistrictController {
     }
 
     @GetMapping("/redisFetchAll")
-    public ResponseEntity<List<DistrictDto>> fetchAllDistrict(){
+    public ResponseEntity<List<DistrictDto>> fetchAllDistrict() {
         List<DistrictDto> districts;
         districts = districtService.fetchAllDistrict();
         return ResponseEntity.ok(districts);

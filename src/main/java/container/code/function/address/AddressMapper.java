@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AddressMapper {
-    public AddressResponse toAddressResponse(Address address){
+    public AddressResponse toAddressResponse(Address address) {
         AddressResponse addressResponse = new AddressResponse();
         String location = address.getDescription() + ", " + address.getDistrict().getName() + ", " + address.getDistrict().getProvince().getName();
         addressResponse.setAddress_id(address.getId());

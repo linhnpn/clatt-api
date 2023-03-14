@@ -24,11 +24,8 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public ResponseEntity<ResponseObject> findAddressByAccountId(int accountId) {
         try {
-            List<AddressResponse> list = addressRepository.findAddressByAccountId(accountId)
-                    .stream()
-                    .map(addressMapper::toAddressResponse)
-                    .collect(Collectors.toList());
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ResponseObject(HttpStatus.ACCEPTED.toString(), null, list));
+            AddressResponse address = addressMapper.toAddressResponse(addressRepository.findAddressByAccountId(accountId));
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ResponseObject(HttpStatus.ACCEPTED.toString(), null, address));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(), "Something wrong occur!", null));
         }

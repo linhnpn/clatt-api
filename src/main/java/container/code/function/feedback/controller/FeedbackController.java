@@ -31,11 +31,13 @@ public class FeedbackController {
     }
 
     @PostMapping("/get-feedbacks")
+    @PreAuthorize("hasAnyAuthority('admin', 'employee', 'renter')")
     public ResponseEntity<ResponseObject> getFeedback(@RequestParam int employee_id, @RequestParam int job_id, @RequestParam(required = false) Integer rate) {
         return feedbackService.getFeedbacks(employee_id, job_id, rate);
     }
 
     @PostMapping("/create-feedback/{id}")
+    @PreAuthorize("hasAuthority('renter')")
     public ResponseEntity<ResponseObject> createFeedback(@PathVariable("order_id") Integer orderId, @RequestBody Feedback feedback) {
         try {
             feedback.setId(null);
@@ -46,6 +48,7 @@ public class FeedbackController {
     }
 
     @PutMapping("/{feedbackId}")
+    @PreAuthorize("hasAnyAuthority('admin', 'renter')")
     public ResponseEntity<ResponseObject> updateFeedback(@PathVariable("feedbackId") int feedbackId, @RequestBody Feedback feedback) {
         try {
             feedback.setId(feedbackId);
@@ -56,6 +59,7 @@ public class FeedbackController {
     }
 
     @DeleteMapping("/{feedbackId}")
+    @PreAuthorize("hasAnyAuthority('admin', 'renter')")
     public ResponseEntity deleteFeedback(@PathVariable("feedbackId") int feedbackId) {
         try {
 

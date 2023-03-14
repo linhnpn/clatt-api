@@ -51,6 +51,7 @@ public class BookingOrder {
     private LocalDateTime timestamp;
 
     @OneToMany(mappedBy = "bookingOrder")
+    @JsonIgnore
     private List<OrderJob> orderJobs;
 
     @OneToOne

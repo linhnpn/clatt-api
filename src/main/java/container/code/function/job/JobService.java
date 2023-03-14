@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 
 public interface JobService {
     ResponseEntity<ResponseObject> getAllJob();
@@ -18,4 +17,10 @@ public interface JobService {
     ResponseEntity<ResponseObject> updateJob(Job job, MultipartFile file) throws IOException;
 
     ResponseEntity<ResponseObject> deleteJob(Job job);
+
+    ResponseEntity<ResponseObject> registerJob(Integer jobId, Integer employeeId);
+
+    ResponseEntity<ResponseObject> unregisterJob(Integer jobId, Integer employeeId);
+
+    ResponseEntity<ResponseObject> getJobByEmp(Integer employeeId);
 }

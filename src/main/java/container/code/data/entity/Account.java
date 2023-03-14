@@ -1,5 +1,6 @@
 package container.code.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -32,6 +33,7 @@ public class Account {
     private String username;
 
     @Column(name = "password")
+    @JsonIgnore
     private String password;
 
     @Column(name = "fullname")
@@ -61,27 +63,32 @@ public class Account {
     @Column(name = "fcm_token")
     private String fcmToken;
 
-    @OneToMany(mappedBy = "account")
+    @OneToOne(mappedBy = "account")
     @JsonIgnoreProperties("account")
-    private List<Address> addresses;
+    private Address address;
 
     @OneToMany(mappedBy = "account")
     @JsonIgnoreProperties("account")
+    @JsonIgnore
     private List<EmployeeJob> employeeJobs;
 
     @OneToMany(mappedBy = "account")
     @JsonIgnoreProperties("account")
+    @JsonIgnore
     private List<HistoryAmount> historyAmounts;
 
     @OneToMany(mappedBy = "account")
-    @JsonIgnoreProperties("account")
+    @JsonIgnoreProperties({"account", "notifications", "bookingOrders"})
+    @JsonIgnore
     private List<Notification> notifications;
 
     @OneToMany(mappedBy = "renter")
-    @JsonIgnoreProperties("account")
+    @JsonIgnoreProperties({"account", "notifications", "bookingOrders"})
+    @JsonIgnore
     private List<BookingOrder> bookingOrders;
 
     @OneToMany(mappedBy = "employee")
     @JsonIgnoreProperties("account")
+    @JsonIgnore
     private List<BookingOrder> bookedOrders;
 }

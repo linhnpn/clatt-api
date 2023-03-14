@@ -21,8 +21,8 @@ public class Address {
     private int accountId;
     @Column(name = "district_id")
     private int districtId;
-    @ManyToOne
-    @JsonIgnoreProperties("addresses")
+    @OneToOne
+    @JsonIgnoreProperties("address")
     @JoinColumn(name = "account_id",insertable = false, updatable = false)
     private Account account;
     @ManyToOne

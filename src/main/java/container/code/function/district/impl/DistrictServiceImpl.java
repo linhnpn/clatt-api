@@ -45,14 +45,14 @@ public class DistrictServiceImpl implements DistrictService {
 
     @Override
     public boolean saveDistrict(DistrictDto district) {
-            String districtId = String.valueOf(district.getId());
-            try {
-                redisTemplate.opsForHash().put(HASH_KEY, districtId, district);
-                return true;
-            }catch (Exception e){
-                e.printStackTrace();
-                return false;
-            }
+        String districtId = String.valueOf(district.getId());
+        try {
+            redisTemplate.opsForHash().put(HASH_KEY, districtId, district);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override

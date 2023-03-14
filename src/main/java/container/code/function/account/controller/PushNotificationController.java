@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class PushNotificationController {
     @Autowired
     private FCMService fcmService;
+
     @PostMapping("/subscribe")
     public void subscribeToTopic(@RequestBody SubscriptionRequestDto subscriptionRequestDto) {
         fcmService.subscribeToTopic(subscriptionRequestDto);
@@ -21,6 +22,7 @@ public class PushNotificationController {
     public void unsubscribeFromTopic(SubscriptionRequestDto subscriptionRequestDto) {
         fcmService.unsubscribeFromTopic(subscriptionRequestDto);
     }
+
     @PostMapping("/topic")
     public String sendPnsToTopic(@RequestBody NotificationRequestDto notificationRequestDto) {
         return fcmService.sendPnsToTopic(notificationRequestDto);
