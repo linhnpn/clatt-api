@@ -202,7 +202,7 @@ public class BookingServiceImpl implements BookingService {
                 dto.setTitle("Cancel!");
                 fcmService.sendPnsToTopic(dto);
                 dtoForEmp.setTarget(accountEmp.getFcmToken());
-                dtoForEmp.setBody("Booking" + bookingOrderId + " is cancel!");
+                dtoForEmp.setBody("Booking " + bookingOrderId + " is cancel!");
                 dtoForEmp.setTitle("Cancel!");
                 fcmService.sendPnsToTopic(dtoForEmp);
             }
