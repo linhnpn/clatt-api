@@ -23,7 +23,8 @@ public class BookingMapper {
         bookingResponse.setJobId((Integer) object.get("job_id"));
         bookingResponse.setJobName((String) object.get("job_name"));
         bookingResponse.setDescription((String) object.get("description"));
-        bookingResponse.setPrice(2000);
+        bookingResponse.setJobImage((String) object.get("jobImage"));
+        bookingResponse.setPrice((Integer) object.get("price") * bookingResponse.getWorkTime());
         return bookingResponse;
     }
 }

@@ -12,11 +12,13 @@ import java.util.Optional;
 
 public interface JobRepository extends JpaRepository<Job, Integer> {
     Optional<Job> findById(Integer id);
-
+    @Query(value = "SELECT j FROM Job j " +
+            "WHERE j.isDeleted = FALSE")
+    List<Job> findAll();
     @Query(value = "SELECT j " +
             "FROM Job j " +
             "INNER JOIN EmployeeJob ej ON ej.job = j " +
             "INNER JOIN Account ac ON ej.account = ac " +
-            "WHERE ac.id = :emp_id ")
+            "WHERE ac.id = :emp_id AND j.isDeleted = FALSE")
     List<Job> findAllByEmpId(@Param("emp_id") Integer empId);
 }

@@ -25,5 +25,6 @@ public class BookingResponse {
     private Integer jobId;
     private String jobName;
     private String description;
+    private String jobImage;
 
 }

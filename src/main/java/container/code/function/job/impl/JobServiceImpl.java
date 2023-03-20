@@ -69,6 +69,7 @@ public class JobServiceImpl implements JobService {
             job.setId(null);
             String url = fileStorage.uploadFile(file);
             job.setThumbnailJobImage(url);
+            job.setDeleted(false);
             jobRepository.save(job);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ResponseObject(HttpStatus.ACCEPTED.toString(), "Add new Job Successfully!", null));
         } catch (Exception e) {
@@ -109,9 +110,10 @@ public class JobServiceImpl implements JobService {
     public ResponseEntity<ResponseObject> deleteJob(Job job) {
         try {
             Job existJob = findJob(job.getId());
-            String oldUrl = existJob.getThumbnailJobImage();
-            fileStorage.deleteFile(oldUrl);
-            jobRepository.delete(existJob);
+//            String oldUrl = existJob.getThumbnailJobImage();
+//            fileStorage.deleteFile(oldUrl);
+            existJob.setDeleted(true);
+            jobRepository.save(existJob);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ResponseObject(HttpStatus.ACCEPTED.toString(), "Deleted Job Successfully!", null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(), "Something wrong occur!", null));
@@ -128,11 +130,17 @@ public class JobServiceImpl implements JobService {
         try {
             Job existJob = findJob(jobId);
             Account account = findAccount(employeeId);
-            EmployeeJob employeeJob = new EmployeeJob();
-            employeeJob.setJob(existJob);
-            employeeJob.setAccount(account);
-            employeeJobRepository.save(employeeJob);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ResponseObject(HttpStatus.ACCEPTED.toString(), "Register Job Successfully!", null));
+            EmployeeJob employeeJobCheck = employeeJobRepository.findByJobAndAccountId(jobId, employeeId);
+            if (employeeJobCheck == null) {
+                EmployeeJob employeeJob = new EmployeeJob();
+                employeeJob.setJob(existJob);
+                employeeJob.setAccount(account);
+                employeeJobRepository.save(employeeJob);
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ResponseObject(HttpStatus.ACCEPTED.toString(), "Register Job Successfully!", null));
+            } else {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseObject(HttpStatus.CONFLICT.toString(), "Registered work cannot be registered further!", null));
+            }
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(), "Something wrong occur!", null));
         }

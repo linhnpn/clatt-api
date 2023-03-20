@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 
 @RestController
-@CrossOrigin(origins = "https://cleaning-house-service.vercel.app", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3030", "https://clatt-api.monoinfinity.net",
+        "https://cleaning-house-service.vercel.app", "http://localhost:8080"}, allowCredentials = "true")
 @RequestMapping(value = "/booking")
 public class BookingController {
     @Autowired

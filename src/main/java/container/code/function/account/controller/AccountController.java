@@ -15,7 +15,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "https://cleaning-house-service.vercel.app", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3030", "https://clatt-api.monoinfinity.net",
+        "https://cleaning-house-service.vercel.app", "http://localhost:8080"}, allowCredentials = "true")
 @RequestMapping(value = "/account")
 public class AccountController {
     @Autowired
@@ -50,7 +51,6 @@ public class AccountController {
     }
 
     @PutMapping("/update-fcm-token")
-    @PreAuthorize("hasAnyAuthority('admin', 'employee', 'renter')")
     public ResponseEntity<ResponseObject> updateFcmToken(
             @RequestParam(name = "account_id") Integer accountId,
             @RequestParam(name = "fcmToken") String fcmToken) {

@@ -39,7 +39,7 @@ public class NotificationServiceImpl implements NotificationService {
         List<Notification> listNotification = notificationRepository.findByAccountId(accountId);
 
         if (!listNotification.isEmpty())
-            return ResponseEntity.status(HttpStatus.FOUND).body(new ResponseObject(HttpStatus.FOUND.toString(), null, listNotification));
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(HttpStatus.OK.toString(), null, listNotification));
         else
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject(HttpStatus.NOT_FOUND.toString(), "Can not find notification", null));
     }

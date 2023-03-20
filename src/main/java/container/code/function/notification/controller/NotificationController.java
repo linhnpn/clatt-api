@@ -7,7 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "https://cleaning-house-service.vercel.app", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3030", "https://clatt-api.monoinfinity.net",
+        "https://cleaning-house-service.vercel.app", "http://localhost:8080"}, allowCredentials = "true")
 @RequestMapping(value = "/notification")
 public class NotificationController {
 
