@@ -66,7 +66,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public ResponseEntity<ResponseObject> addBookingOrder(Integer renterId, Integer employeeId, Integer jobId, LocalDateTime timestamp,
                                                           LocalDateTime workDate,
-                                                          Integer address_id, String status, String description, Integer workTime) {
+                                                          String address_id, String status, String description, Integer workTime) {
         try {
             BookingOrder bookingOrder = new BookingOrder();
             Account accountUser = findAccount(renterId);
@@ -82,8 +82,7 @@ public class BookingServiceImpl implements BookingService {
                 bookingOrder.setWorkDate(workDate);
                 bookingOrder.setTimestamp(timestamp);
                 bookingOrder.setDescription(description);
-                bookingOrder.setLocation(address.getDescription() + ", " + address.getDistrict().getName() + ", " +
-                        address.getDistrict().getProvince().getName());
+                bookingOrder.setLocation(address_id);
                 BookingOrder saveBooking = bookingOrderRepository.save(bookingOrder);
                 Job job = findJob(jobId);
 

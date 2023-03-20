@@ -31,7 +31,7 @@ public class BookingController {
     @PreAuthorize("hasAnyAuthority('admin', 'renter')")
     public ResponseEntity<ResponseObject> createBooking(@RequestParam Integer userId, @RequestParam Integer employeeId,
                                                         @RequestParam Integer jobId, @RequestParam String timestamp,
-                                                        @RequestParam Integer address_id, @RequestParam String status,
+                                                        @RequestParam String address_id, @RequestParam String status,
                                                         @RequestParam String description, @RequestParam Integer workTime,
                                                         @RequestParam String workDate) {
         LocalDateTime dateTime = LocalDateTime.parse(timestamp);

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public interface BookingService {
     ResponseEntity<ResponseObject> addBookingOrder(Integer userId, Integer employeeId, Integer jobId, LocalDateTime timestamp,
                                                    LocalDateTime workDate,
-                                                   Integer address_id, String status, String description, Integer workTime);
+                                                   String address_id, String status, String description, Integer workTime);
 
     ResponseEntity<ResponseObject> updateBookingOrder(Integer bookingOrderId, BookingOrder bookingOrder);
 
