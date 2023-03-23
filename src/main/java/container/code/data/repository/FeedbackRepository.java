@@ -21,10 +21,10 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Integer> {
     @Query(value = "SELECT COUNT(*) FROM Feedback f LEFT JOIN f.bookingOrder bo " +
             "LEFT JOIN bo.orderJobs oj LEFT JOIN oj.job j LEFT JOIN bo.employee emp " +
             "WHERE j.id = :job_id AND emp.id = :emp_id")
-    String countFeedback(@Param("job_id") Integer jobId, @Param("emp_id") Integer empId);
+    Long countFeedback(@Param("job_id") Integer jobId, @Param("emp_id") Integer empId);
 
-    @Query(value = "SELECT AVG(f.rate) FROM Feedback f LEFT JOIN f.bookingOrder bo " +
+    @Query(value = "SELECT COALESCE(AVG(f.rate), 5) FROM Feedback f LEFT JOIN f.bookingOrder bo " +
             "LEFT JOIN bo.orderJobs oj LEFT JOIN oj.job j LEFT JOIN bo.employee emp " +
             "WHERE j.id = :job_id AND emp.id = :emp_id ")
-    String averageFeedback(@Param("job_id") Integer jobId, @Param("emp_id") Integer empId);
+    Double averageFeedback(@Param("job_id") Integer jobId, @Param("emp_id") Integer empId);
 }

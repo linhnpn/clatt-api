@@ -12,5 +12,9 @@ public interface NotificationService {
 
     boolean createNotification(Integer userId, String status, String detail, LocalDateTime timestamp);
 
-    boolean updateNotification(Integer id,String status);
+    boolean updateNotification(Integer id, String status);
+
+    ResponseEntity<ResponseObject> isReadNotification(Integer notificationId);
+
+    ResponseEntity<ResponseObject> readAllNotification(Integer accountId);
 }

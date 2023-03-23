@@ -88,4 +88,26 @@ public class NotificationServiceImpl implements NotificationService {
         }
         return false;
     }
+
+    @Override
+    public ResponseEntity<ResponseObject> isReadNotification(Integer notificationId) {
+        try {
+            Notification existNotification = notificationRepository.findById(notificationId).orElseThrow(() -> new NotFoundException("Notification not found"));
+            existNotification.setRead(true);
+            notificationRepository.save(existNotification);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ResponseObject(HttpStatus.ACCEPTED.toString(), "Read!", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(), "Something wrong occur!", null));
+        }
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> readAllNotification(Integer accountId) {
+        try {
+            notificationRepository.readAllNotification(accountId);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ResponseObject(HttpStatus.ACCEPTED.toString(), "Read!", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(), "Something wrong occur!", null));
+        }
+    }
 }

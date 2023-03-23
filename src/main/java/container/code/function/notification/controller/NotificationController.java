@@ -22,9 +22,21 @@ public class NotificationController {
         return notificationService.getNotificationDetail(accountId, notificationId);
     }
 
+    @PostMapping("/read-notification")
+    public ResponseEntity<ResponseObject> isReadNotification(
+            @RequestParam(name = "notification_id") Integer notificationId) {
+        return notificationService.isReadNotification(notificationId);
+    }
+
     @GetMapping("/getAllNotifications")
     public ResponseEntity<ResponseObject> getAllNotifications(
             @RequestParam(name = "account_id") Integer accountId) {
         return notificationService.getAllMyNotificationsById(accountId);
+    }
+
+    @PostMapping("/read-all-notifications")
+    public ResponseEntity<ResponseObject> readAllNotifications(
+            @RequestParam(name = "account_id") Integer accountId) {
+        return notificationService.readAllNotification(accountId);
     }
 }

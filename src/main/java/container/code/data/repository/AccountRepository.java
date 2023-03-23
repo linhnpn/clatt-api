@@ -1,13 +1,10 @@
 package container.code.data.repository;
 
-import container.code.data.dto.ResponseObject;
 import container.code.data.entity.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -22,13 +19,13 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
 
     @Query("SELECT t FROM Account t WHERE t.id = ?1 and t.isLocked = FALSE")
     Optional<Account> findById(Integer Id);
+
     @Query("SELECT t FROM Account t WHERE t.role = ?1 and t.isLocked = FALSE")
     List<Account> findByRole(String role);
 
     @Query("SELECT t FROM Account t WHERE t.email = ?1 and t.isLocked = FALSE")
     Account findByEmail(String email);
 
-//    @Query("SELECT t FROM Account t WHERE t.isLocked = FALSE and t.username = :username")
     @Query("SELECT t FROM Account t LEFT JOIN t.employeeJobs LEFT JOIN t.bookedOrders LEFT JOIN t.bookingOrders LEFT JOIN t.address ad LEFT JOIN ad.district di LEFT JOIN di.province WHERE t.isLocked = FALSE and t.username = :username")
     Account findByUsername(@Param("username") String username);
 
@@ -55,4 +52,7 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     @Query("SELECT t FROM Account t WHERE t.id NOT IN " +
             "(SELECT f.id FROM BookingOrder f WHERE YEAR(f.workDate) = YEAR(?1) and MONTH(f.workDate) = MONTH(?1) and DAY(f.workDate) = DAY(?1))")
     List<Account> getAccountFromOrderWithDate(LocalDateTime date);
+
+    @Query("SELECT count(t.id) FROM Account t WHERE t.role = :role")
+    Integer getTotalAccount(@Param("role") String role);
 }
